@@ -57,12 +57,12 @@ def create_node(payload: NodeCreate, db: Session = Depends(get_db)):
     db.refresh(node)
     return node
 
-
+# GET ALL
 @app.get("/api/nodes", response_model=list[NodeOut])
 def list_nodes(db: Session = Depends(get_db)):
     return db.query(Node).all()
 
-
+# GET 
 @app.get("/api/nodes/{name}", response_model=NodeOut)
 def get_node(name: str, db: Session = Depends(get_db)):
     node = db.query(Node).filter(Node.name == name).first()
@@ -70,7 +70,7 @@ def get_node(name: str, db: Session = Depends(get_db)):
         raise HTTPException(status_code=404, detail="Node not found")
     return node
 
-
+# UPDATE
 @app.put("/api/nodes/{name}", response_model=NodeOut)
 def update_node(name: str, payload: NodeUpdate, db: Session = Depends(get_db)):
     node = db.query(Node).filter(Node.name == name).first()
@@ -84,7 +84,7 @@ def update_node(name: str, payload: NodeUpdate, db: Session = Depends(get_db)):
     db.refresh(node)
     return node
 
-
+# DELETE
 @app.delete("/api/nodes/{name}", status_code=status.HTTP_204_NO_CONTENT)
 def delete_node(name: str, db: Session = Depends(get_db)):
     node = db.query(Node).filter(Node.name == name).first()
